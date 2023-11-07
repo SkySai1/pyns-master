@@ -16,6 +16,24 @@ _OPTIONS ={
     'LOGGING' : ['enable', 'keeping', 'pathway' , 'level', 'separate', 'maxsize','rotation']
 }
 
+def loadconf():
+    try:
+        if sys.argv[1:]:
+            path = os.path.abspath(sys.argv[1])
+            if os.path.exists(path):
+                CONF, state = getconf(sys.argv[1]) # <- for manual start
+            else:
+                print('Missing config file at %s' % path)
+        else:
+            thisdir = os.path.dirname(os.path.abspath(__file__))
+            CONF, state = getconf(thisdir+'/config.ini')
+        if state is False:
+            raise Exception()
+        return CONF
+    except:
+        logging.critical('Error with manual start', exc_info=(logging.DEBUG >= logging.root.level))
+        sys.exit(1)  
+
 def getconf(path):
     config = configparser.ConfigParser()
     config.read(path)
