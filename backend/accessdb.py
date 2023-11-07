@@ -35,6 +35,13 @@ def enginer(_CONF):
         logging.critical(f"The database is unreachable", exc_info=(logging.DEBUG >= logging.root.level))
         sys.exit(1)
 
+class Users(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False, unique=True)
+    password = Column(String(255), nullable=False)
+
+
 class Nodes(Base):
     __tablename__ = "nodes"
     id = Column(Integer, primary_key=True)

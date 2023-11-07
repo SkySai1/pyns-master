@@ -1,9 +1,10 @@
 #!/home/dnspy/master/master/bin/python3
+import secrets
 import sys
 import os
 import logging
 from backend.accessdb import AccessDB, enginer
-from flask import Flask, g, request, current_app, session
+from flask import Flask, g, request, current_app, session, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from backend.functions import ThisNode
 from backend.logger import logsetup
@@ -13,9 +14,24 @@ app = Flask(__name__)
 
 @app.before_request
 def pre_load():
-    '''if "user_id" in session:
-        g.user = db.session.get(session["user_id"])'''
+    if "user_id" in session:
+        pass
+        #g.user = db.session.get(session["user_id"])
+    elif request.form.get('action') == str(hash("login")):
+        pass
+    else:
+        return render_template('login.html.j2', action = hash("login"))
     pass
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        if request.form.get('username') and request.form.get('password'):
+            session.update(user_id = 0)
+        return 'login'
+    else:
+        return render_template('login.html.j2', action = hash("login"))
+
 
 @app.route('/')
 def index():
@@ -29,7 +45,9 @@ def user(name):
 @app.route('/t')
 def test():
     r = 'Test'
-    d = AccessDB.GetFromDomains(appdb)
+    db = AccessDB(appdb.engine, CONF)
+    #d = AccessDB.GetFromDomains(appdb)
+    d = db.GetFromDomains()
     r = []
     for obj in d:
         row = obj[0]
@@ -41,9 +59,13 @@ def start():
     logreciever = logsetup(CONF)
     engine = enginer(CONF)
     #db = AccessDB(engine, CONF)
+    app.config['SECRET_KEY'] = secrets.token_hex()
     app.config['SQLALCHEMY_DATABASE_URI'] = engine.url
+
     global appdb
     appdb = SQLAlchemy(app)
+
+
     app.run('0.0.0.0',5380,debug=True)
     
 
