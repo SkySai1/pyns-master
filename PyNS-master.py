@@ -1,4 +1,4 @@
-#!/home/dnspy/master/venv/bin/python3
+#!/etc/nspy/master/venv/bin/python3
 import secrets
 from datetime import datetime
 from back.accessdb import AccessDB, enginer
@@ -17,6 +17,8 @@ app = Flask(__name__)
 @app.before_request
 def pre_load():
     if "user_id" in session:
+        pass
+    elif request.path in ['/static/css/login.css']:
         pass
     elif request.form.get('action') == str(hash("login")):
         user = request.form.get('username')

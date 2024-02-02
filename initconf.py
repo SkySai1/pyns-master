@@ -1,4 +1,4 @@
-#!/home/dnspy/master/venv/bin/python3
+#!/etc/nspy/master/venv/bin/python3
 import logging
 import os
 import configparser
