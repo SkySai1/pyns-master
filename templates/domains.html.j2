@@ -1,0 +1,41 @@
+{% extends "base.html.j2" %}
+{% block title %}Домены{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript" src="static/js/main.js"></script>
+    <script> window.onload = get_all('/domains', '{{remove}}', '{{edit}}', '{{switch}}')</script>
+    <style>
+    </style>
+{% endblock %}
+{% block body %}
+
+    <h1>Список доменов </h1>
+    <div>
+        <div>
+            <p id="message"></p>
+            <p id="hmsg" hidden></p>
+            <form method="post" onsubmit="return false">
+                <table>
+                    <tr>
+                        <td><p>{{form.domain()}}</p></td>
+                        <td><button onclick="new_object('/domains',$(this.form).serializeArray(), '{{new}}')">Плюсик</button></td>
+                        <td><input id="d_import" type="file" onchange="object_import('/domains',this, '{{new}}')"> <label for="d_import">Импорт</label></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <input placeholder="Поиск" oninput="search_object(this)">
+            <hr>
+            <table id="o_list">
+                <tr>
+                    <td></td><td><input id="o-sw-all" type="checkbox" checked onchange="switch_object('/domains','*', '{{switch}}', this.checked)"></td>
+                    <td></td><td></td>
+                    <td><button onclick="remove_selected_objects('/domains','{{remove}}')">Много корзин</button></td>
+                    <td><input id="check_o_all" type="checkbox" onchange="select_objects(this.checked)"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

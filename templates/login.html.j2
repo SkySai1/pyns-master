@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Страница Входа</title>
+</head>
+<body>
+    <div>
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+        {% endwith %}
+        <form method="post" action="{{url}}">
+            <input type="hidden" name="action" value="{{action}}">
+            <p>{{ form.username.label}} {{form.username()}}</p>
+            <p>{{ form.password.label}} {{form.password()}}</p>
+            <p>{{ form.submit() }}</p>          
+        </form>
+    </div>
+</body>

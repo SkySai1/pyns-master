@@ -1,0 +1,19 @@
+<html>
+<head>
+    {% block head %}
+    <title> {% block title %} {% endblock %} - DCM</title>
+    <script type="text/javascript" src="static/js/jquery.js"></script>
+    {% endblock %}
+</head>
+<body>
+    <div id="header">
+        <div id="navbar">
+        <a href="/">Главная</a>
+        <a href="/domains">Домены</a>
+        <a href="/zones">Зоны</a>
+        </div>
+    </div>
+    {% block body%}
+    {% endblock%}
+</body>
+</html>
