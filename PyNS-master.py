@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.before_request
 def pre_load():
-    if "user_id" in session or True:
+    if "user_id" in session:
         pass
     elif request.form.get('action') == str(hash("login")):
         user = request.form.get('username')
