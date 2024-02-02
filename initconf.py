@@ -1,4 +1,4 @@
-#!/home/dnspy/master/master/bin/python3
+#!/home/dnspy/master/venv/bin/python3
 import logging
 import os
 import configparser
@@ -8,11 +8,8 @@ import os, platform
 import ipaddress
 
 _OPTIONS ={
-    'GENERAL': ['listen-ip', 'listen-port', 'printstats', 'timedelta'],
-    'AUTHORITY': [],
-    'CACHING': ['expire', 'scale', 'size', 'download', 'upload'],
-    'RECURSION': ['enable',  'maxdepth', 'timeout', 'retry'],
-    'DATABASE': ['dbuser', 'dbpass', 'dbhost', 'dbport', 'dbname',  'timesync', 'node'],
+    'GENERAL': ['listen-ip', 'listen-port', 'timedelta', 'autouser'],
+    'DATABASE': ['dbuser', 'dbpass', 'dbhost', 'dbport', 'dbname'],
     'LOGGING' : ['enable', 'keeping', 'pathway' , 'level', 'separate', 'maxsize','rotation']
 }
 
@@ -60,6 +57,7 @@ def checkconf(CONF:configparser.ConfigParser):
                     if opt[0] == 'listen-ip': ipaddress.ip_address(opt[1]).version == 4
                     if opt[0] == 'listen-port': int(opt[1])
                     if opt[0] == 'printstats': eval(opt[1])
+                    if opt[0] == 'autouser': eval(opt[1])
                     if opt[0] == 'expire': float(opt[1])
                     if opt[0] == 'scale': float(opt[1])
                     if opt[0] == 'size': int(opt[1])
@@ -121,33 +119,11 @@ def deafultconf():
     config['GENERAL'] = {
         'listen-ip': '127.0.0.2',
         'listen-port': 53,
-        ";Print statistic in console": None,
-        'printstats': False,
         ";For mysql better keep timedelta as 0, for pgsql as your region timezone": None,
-        'timedelta': 3
-    }
-    config['AUTHORITY'] = {
-
-    }
-    config['CACHING'] = {
-        ";Time to clear of core cache data":None,
-        'expire': 5,
-        ";Max multimeter of expire in high load":None,
-        'scale': 10,
-        ";Max size of core cache (cache data per core) in bytes":None,
-        'size': 1048576,
-        ";Is to download cache data from node into DB = False|True":None,
-        'download': True,
-        ";Is to upload cache data from DB into node = False|True":None,
-        'upload': True
-    }
-    config['RECURSION'] = {
-        'enable': False,
-        ";Specify another recursion DNS server": None,
-        'resolver': '',
-        'maxdepth': 30,
-        'timeout': 0.5,
-        'retry': 1
+        'timedelta': 3,
+        ";For auto creating zero super user ('admin'), in each start password will random = True":None,
+        ";WARNING: logging level must set to INFO, password will send in there": None,
+        'autouser': True
     }
     config['DATABASE'] = {
         'dbuser': DBUser,
@@ -155,10 +131,6 @@ def deafultconf():
         'dbhost': DBHost,
         'dbport': 5432,
         'dbname': DBName,
-        ";Time to sync with Data Base":None,
-        'timesync': 5,
-        ";To identify themselves in DB":None,
-        'node': hostname,
     }
     config['LOGGING'] = {
         ";Enable logging = False|True": None,
